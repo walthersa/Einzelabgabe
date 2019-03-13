@@ -47,7 +47,7 @@ addons:
   sonarcloud:
     organization: "walthersa-github" # der key der organisation auf sonarcloud.io
     token:
-      secure: $Test       # $SONAR_TOKEN -> Umgebungsvariable auf travis-ci.org
+      secure: $SONAR_TOKEN      # $SONAR_TOKEN -> Umgebungsvariable auf travis-ci.org
 
 # benachrichtigungen per email ausschalten
 notifications:
