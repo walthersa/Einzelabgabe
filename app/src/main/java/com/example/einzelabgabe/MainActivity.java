@@ -58,6 +58,8 @@ class NetworkThread extends Thread{
 
     String modifiedSentence;
     public void run(){
+
+        
         Socket clientSocket = null;
         try {
             clientSocket = new Socket("se2-isys.aau.at",53212);
@@ -68,7 +70,7 @@ class NetworkThread extends Thread{
 
             //   sentence = inFromUser.readLine();
 
-            outToServer.writeBytes("1626008" + '\n');
+            outToServer.writeBytes(editText.getText().toString() + '\n');
 
             modifiedSentence = inFromServer.readLine();
 
