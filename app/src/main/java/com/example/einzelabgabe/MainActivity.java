@@ -15,6 +15,8 @@ import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity  {
 
+    String masage = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,31 +38,47 @@ public class MainActivity extends AppCompatActivity  {
 
                // BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
-                Socket clientSocket = null;
+                NetworkThread nt = new NetworkThread();
+
+                nt.start();
+
                 try {
-                    clientSocket = new Socket("se2-isys.aau.at",53212);
-
-                    DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-
-                   BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-                 //   sentence = inFromUser.readLine();
-
-                    outToServer.writeBytes(editText.getText().toString() + '\n');
-
-                    modifiedSentence = inFromServer.readLine();
-
-                    System.out.println("From Server: " + modifiedSentence);
-
-                    clientSocket.close();
-                } catch (IOException e) {
+                    nt.join();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
-
                 }
-
 
 
             }
         });
+    }
+}
+
+class NetworkThread extends Thread{
+
+    String modifiedSentence;
+    public void run(){
+        Socket clientSocket = null;
+        try {
+            clientSocket = new Socket("se2-isys.aau.at",53212);
+
+            DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+            //   sentence = inFromUser.readLine();
+
+            outToServer.writeBytes("1626008" + '\n');
+
+            modifiedSentence = inFromServer.readLine();
+
+            System.out.println("From Server: " + modifiedSentence);
+
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
     }
 }
