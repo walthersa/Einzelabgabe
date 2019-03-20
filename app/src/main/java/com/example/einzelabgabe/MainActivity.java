@@ -13,9 +13,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+
+
 public class MainActivity extends AppCompatActivity  {
 
-    String masage = "";
+    public String masage;
+
+    public MainActivity() {
+        masage = "";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +39,7 @@ public class MainActivity extends AppCompatActivity  {
                 EditText editText = (EditText) findViewById(R.id.editText);
                 textView.setText(editText.getText().toString());
 
-                String sentence;
+
                 String modifiedSentence;
 
                // BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
@@ -55,9 +61,11 @@ public class MainActivity extends AppCompatActivity  {
 }
 
 class NetworkThread extends Thread{
-
+    public String massage;
     String modifiedSentence;
     public void run(){
+        String sentence;
+
 
         
         Socket clientSocket = null;
@@ -68,13 +76,16 @@ class NetworkThread extends Thread{
 
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            //   sentence = inFromUser.readLine();
+          //  EditText editText = (EditText) findViewById(R.id.editText);
+          //  sentence = editText.getText().toString();
 
-            outToServer.writeBytes(editText.getText().toString() + '\n');
+            outToServer.writeBytes( massage+ '\n');
 
             modifiedSentence = inFromServer.readLine();
 
             System.out.println("From Server: " + modifiedSentence);
+
+
 
             clientSocket.close();
         } catch (IOException e) {
@@ -84,3 +95,4 @@ class NetworkThread extends Thread{
 
     }
 }
+
