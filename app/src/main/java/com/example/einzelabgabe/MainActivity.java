@@ -38,15 +38,14 @@ public class MainActivity extends AppCompatActivity  {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)  {
                 EditText editText = (EditText) findViewById(R.id.editText);
+                textView.setText(editText.getText().toString());
                 String text = editText.getText().toString();
 
                 String modifiedSentence;
 
                // BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
-               text = new Proccess().doInBackground(text);
-
-               textView.setText(text);
+                new Proccess().execute(text);
 
             }
         });
@@ -55,15 +54,14 @@ public class MainActivity extends AppCompatActivity  {
 
 
 class Proccess extends AsyncTask<String, Void, String> {
+    public String massage = "01626008";
     String modifiedSentence;
-    String sentence;
-
-
+        String sentence;
     @Override
     protected String doInBackground(String... arg0) {
+       // final TextView textView = (TextView) findViewById(R.id.textViewAntwort);
         String text = arg0[0];
         System.out.print(text);
-
         Socket clientSocket = null;
         try {
             clientSocket = new Socket("se2-isys.aau.at",53212);
@@ -72,12 +70,17 @@ class Proccess extends AsyncTask<String, Void, String> {
 
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+           //   EditText editText = (EditText) findViewById(R.id.editText);
+            //  sentence = editText.getText().toString();
 
-            outToServer.writeBytes( "01626008" + '\n');
+            outToServer.writeBytes( text+ '\n');
 
             modifiedSentence = inFromServer.readLine();
 
             System.out.println("From Server: " + modifiedSentence);
+
+           // textView.setText(modifiedSentence);
+
 
             clientSocket.close();
         } catch (IOException e) {
