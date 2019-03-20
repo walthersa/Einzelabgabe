@@ -13,7 +13,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity  {
@@ -40,7 +40,14 @@ public class MainActivity extends AppCompatActivity  {
 
                // BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
                 Proccess myProccess = new Proccess();
-                text = "" + myProccess.execute(text);
+                myProccess.execute(text);
+                try {
+                    text = myProccess.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 textView.setText(text);
 
