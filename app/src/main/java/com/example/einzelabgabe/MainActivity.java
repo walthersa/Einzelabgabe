@@ -61,13 +61,21 @@ public class MainActivity extends AppCompatActivity  {
 
                 String text = editText.getText().toString();
                 int finalNumber = 1;
-                for(int i = 0; i<text.length()/2; i++){
-                    int number = text.charAt(i);
+                for(int i = 0; i<text.length(); i++){
+                    int number = (text.charAt(i))-48;
+                    //System.out.println(number);
+                    if(number == 0){
+                        number = 1;
+                    }
                     if(number%2 == 0){
                         finalNumber = finalNumber * number;
                     }
 
 
+                }
+
+                if(finalNumber == 1){
+                    finalNumber = 0;
                 }
 
                 textView.setText("Das Produkt ist: " + finalNumber);
