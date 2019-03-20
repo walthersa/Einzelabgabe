@@ -26,8 +26,6 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         final TextView textView = (TextView) findViewById(R.id.textViewAntwort);
-        final EditText editText = (EditText) findViewById(R.id.editText);
-
 
 
         final Button button = findViewById(R.id.buttonAbschicken);
@@ -36,9 +34,6 @@ public class MainActivity extends AppCompatActivity  {
                 EditText editText = (EditText) findViewById(R.id.editText);
                 String text = editText.getText().toString();
 
-                String modifiedSentence;
-
-               // BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
                 Proccess myProccess = new Proccess();
                 myProccess.execute(text);
                 try {
@@ -63,7 +58,6 @@ public class MainActivity extends AppCompatActivity  {
                 int finalNumber = 1;
                 for(int i = 0; i<text.length(); i++){
                     int number = (text.charAt(i))-48;
-                    //System.out.println(number);
                     if(number == 0){
                         number = 1;
                     }
@@ -89,9 +83,8 @@ public class MainActivity extends AppCompatActivity  {
 
 
 class Proccess extends AsyncTask<String, Void, String> {
-    public String massage = "01626008";
     String modifiedSentence;
-        String sentence;
+
     @Override
     protected String doInBackground(String... arg0) {
        // final TextView textView = (TextView) findViewById(R.id.textViewAntwort);
@@ -105,17 +98,11 @@ class Proccess extends AsyncTask<String, Void, String> {
 
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-           //   EditText editText = (EditText) findViewById(R.id.editText);
-            //  sentence = editText.getText().toString();
-
             outToServer.writeBytes( text+ '\n');
 
             modifiedSentence = inFromServer.readLine();
 
             System.out.println("From Server: " + modifiedSentence);
-
-           // textView.setText(modifiedSentence);
-
 
             clientSocket.close();
         } catch (IOException e) {
