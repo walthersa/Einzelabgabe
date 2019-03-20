@@ -1,5 +1,6 @@
 package com.example.einzelabgabe;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,36 +39,28 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v)  {
                 EditText editText = (EditText) findViewById(R.id.editText);
                 textView.setText(editText.getText().toString());
-
+                String text = editText.getText().toString();
 
                 String modifiedSentence;
 
                // BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
-                NetworkThread nt = new NetworkThread();
-
-                nt.start();
-
-                try {
-                    nt.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+                new Proccess().execute();
 
             }
         });
     }
 }
 
-class NetworkThread extends Thread{
-    public String massage;
+
+class Proccess extends AsyncTask<String, Void, Void> {
+    public String massage = "01626008";
     String modifiedSentence;
-    public void run(){
         String sentence;
+    @Override
+    protected Void doInBackground(String... arg0) {
+        final TextView textView = (TextView) findViewById(R.id.textViewAntwort);
 
-
-        
         Socket clientSocket = null;
         try {
             clientSocket = new Socket("se2-isys.aau.at",53212);
@@ -76,8 +69,8 @@ class NetworkThread extends Thread{
 
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-          //  EditText editText = (EditText) findViewById(R.id.editText);
-          //  sentence = editText.getText().toString();
+              EditText editText = (EditText) findViewById(R.id.editText);
+            //  sentence = editText.getText().toString();
 
             outToServer.writeBytes( massage+ '\n');
 
@@ -85,6 +78,7 @@ class NetworkThread extends Thread{
 
             System.out.println("From Server: " + modifiedSentence);
 
+            textView.setText(modifiedSentence);
 
 
             clientSocket.close();
@@ -93,6 +87,7 @@ class NetworkThread extends Thread{
 
         }
 
+        return null; //this should be the last statement otherwise cause unreachable code.
     }
-}
 
+}
