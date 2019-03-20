@@ -18,11 +18,7 @@ import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity  {
 
-    public String masage;
 
-    public MainActivity() {
-        masage = "";
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +30,45 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-        final Button button = findViewById(R.id.button);
+        final Button button = findViewById(R.id.buttonAbschicken);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)  {
                 EditText editText = (EditText) findViewById(R.id.editText);
-                textView.setText(editText.getText().toString());
                 String text = editText.getText().toString();
 
                 String modifiedSentence;
 
                // BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+                Proccess myProccess = new Proccess();
+                text = "" + myProccess.execute(text);
 
-                new Proccess().execute(text);
+                textView.setText(text);
 
             }
         });
+
+        final Button buttonBerechne = findViewById(R.id.buttonBerechne);
+        buttonBerechne.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)  {
+                EditText editText = (EditText) findViewById(R.id.editText);
+
+                String text = editText.getText().toString();
+                int finalNumber = 1;
+                for(int i = 0; i<text.length()/2; i++){
+                    int number = text.charAt(i);
+                    if(number%2 == 0){
+                        finalNumber = finalNumber * number;
+                    }
+
+
+                }
+
+                textView.setText("Das Produkt ist: " + finalNumber);
+
+            }
+        });
+
+
     }
 }
 
@@ -88,7 +108,7 @@ class Proccess extends AsyncTask<String, Void, String> {
 
         }
 
-        return modifiedSentence; //this should be the last statement otherwise cause unreachable code.
+        return modifiedSentence;
     }
 
 }
