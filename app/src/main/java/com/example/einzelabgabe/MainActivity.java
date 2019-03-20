@@ -38,14 +38,15 @@ public class MainActivity extends AppCompatActivity  {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)  {
                 EditText editText = (EditText) findViewById(R.id.editText);
-                textView.setText(editText.getText().toString());
                 String text = editText.getText().toString();
 
                 String modifiedSentence;
 
                // BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
-                new Proccess().execute();
+               text = new Proccess().doInBackground(text);
+
+               textView.setText(text);
 
             }
         });
@@ -53,13 +54,15 @@ public class MainActivity extends AppCompatActivity  {
 }
 
 
-class Proccess extends AsyncTask<String, Void, Void> {
-    public String massage = "01626008";
+class Proccess extends AsyncTask<String, Void, String> {
     String modifiedSentence;
-        String sentence;
+    String sentence;
+
+
     @Override
-    protected Void doInBackground(String... arg0) {
-        final TextView textView = (TextView) findViewById(R.id.textViewAntwort);
+    protected String doInBackground(String... arg0) {
+        String text = arg0[0];
+        System.out.print(text);
 
         Socket clientSocket = null;
         try {
@@ -69,17 +72,12 @@ class Proccess extends AsyncTask<String, Void, Void> {
 
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-              EditText editText = (EditText) findViewById(R.id.editText);
-            //  sentence = editText.getText().toString();
 
-            outToServer.writeBytes( massage+ '\n');
+            outToServer.writeBytes( "01626008" + '\n');
 
             modifiedSentence = inFromServer.readLine();
 
             System.out.println("From Server: " + modifiedSentence);
-
-            textView.setText(modifiedSentence);
-
 
             clientSocket.close();
         } catch (IOException e) {
@@ -87,7 +85,7 @@ class Proccess extends AsyncTask<String, Void, Void> {
 
         }
 
-        return null; //this should be the last statement otherwise cause unreachable code.
+        return modifiedSentence; //this should be the last statement otherwise cause unreachable code.
     }
 
 }
